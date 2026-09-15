@@ -1,0 +1,2362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudyAI | Personalized Study Assistant</title>
+
+    <!-- Tailwind CSS + Typography -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ["Georgia", "serif"],
+                    },
+
+                    animation: {
+                        float: "float 5s ease-in-out infinite",
+                        fadeUp: "fadeUp 0.8s ease-out",
+                    },
+
+                    keyframes: {
+                        float: {
+                            "0%, 100%": {
+                                transform: "translateY(0px)"
+                            },
+                            "50%": {
+                                transform: "translateY(-10px)"
+                            }
+                        },
+
+                        fadeUp: {
+                            "0%": {
+                                opacity: "0",
+                                transform: "translateY(25px)"
+                            },
+                            "100%": {
+                                opacity: "1",
+                                transform: "translateY(0)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f5f2ea;
+            color: #17233c;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 2px;
+            background: #e97845;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .premium-card {
+            transition: all 0.35s ease;
+        }
+
+        .premium-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(23, 35, 60, 0.10);
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.10);
+            backdrop-filter: blur(10px);
+        }
+
+        .orange-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e97845;
+            display: inline-block;
+        }
+
+        .progress-bar {
+            transition: width 1.2s ease;
+        }
+
+        .game-button.active {
+            background: #17233c;
+            color: white;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            scrollbar-width: none;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<header class="sticky top-0 z-50 bg-[#f5f2ea]/95 backdrop-blur-md
+               border-b border-gray-200">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="h-20 flex items-center justify-between">
+
+            <!-- LOGO -->
+
+            <a href="#home"
+               class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl bg-[#17233c]
+                            text-white flex items-center justify-center
+                            font-bold">
+                    S
+                </div>
+
+                <div>
+                    <p class="font-bold text-lg">
+                        StudyAI
+                    </p>
+
+                    <p class="text-[10px] uppercase tracking-[2px]
+                              text-gray-500">
+                        Learn Smarter
+                    </p>
+                </div>
+
+            </a>
+
+
+            <!-- DESKTOP NAV -->
+
+            <nav class="hidden lg:flex items-center gap-8 text-sm font-medium">
+
+                <a href="#home" class="nav-link">
+                    Home
+                </a>
+
+                <a href="#features" class="nav-link">
+                    Features
+                </a>
+
+                <a href="#tracking" class="nav-link">
+                    My Progress
+                </a>
+
+                <a href="#peers" class="nav-link">
+                    Study Together
+                </a>
+
+                <a href="#games" class="nav-link">
+                    Game Zone
+                </a>
+
+                <a href="#assistant" class="nav-link">
+                    AI Assistant
+                </a>
+
+            </nav>
+
+
+            <button
+                onclick="startLearning()"
+                class="hidden md:block bg-[#17233c] text-white
+                       px-6 py-3 rounded-full
+                       text-sm font-semibold
+                       hover:bg-[#263657] transition">
+
+                Start Learning
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section id="home"
+         class="min-h-[calc(100vh-80px)]
+                flex items-center">
+
+    <div class="max-w-7xl mx-auto px-6 py-20 w-full">
+
+        <div class="grid lg:grid-cols-2 gap-14 items-center">
+
+
+            <!-- LEFT -->
+
+            <div class="animate-fadeUp">
+
+                <p class="uppercase tracking-[4px]
+                          text-orange-600 text-sm font-semibold">
+                    AI-POWERED PERSONALIZED LEARNING
+                </p>
+
+
+                <h1 class="font-serif text-5xl md:text-7xl
+                           leading-[1.05] mt-6">
+
+                    Study less
+                    <span class="italic text-orange-600">
+                        blindly.
+                    </span>
+
+                    <br>
+
+                    Learn more
+                    <span class="italic">
+                        intentionally.
+                    </span>
+
+                </h1>
+
+
+                <p class="text-gray-600 text-lg md:text-xl
+                          leading-relaxed max-w-xl mt-7">
+
+                    StudyAI understands what you have learned,
+                    where you struggle and how you learn best —
+                    then turns that information into a personalized
+                    learning journey.
+
+                </p>
+
+
+                <div class="flex flex-wrap gap-4 mt-9">
+
+                    <button
+                        onclick="startLearning()"
+                        class="bg-[#17233c] text-white
+                               px-7 py-4 rounded-full
+                               font-semibold
+                               hover:scale-105 transition">
+
+                        Explore My Learning →
+
+                    </button>
+
+
+                    <button
+                        onclick="document.getElementById('features').scrollIntoView()"
+                        class="border border-[#17233c]
+                               px-7 py-4 rounded-full
+                               font-semibold
+                               hover:bg-[#17233c]
+                               hover:text-white transition">
+
+                        See How It Works
+
+                    </button>
+
+                </div>
+
+
+                <!-- SMALL STATS -->
+
+                <div class="flex gap-10 mt-12">
+
+                    <div>
+
+                        <p class="text-2xl font-bold">
+                            78%
+                        </p>
+
+                        <p class="text-xs text-gray-500">
+                            Learning Progress
+                        </p>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-2xl font-bold">
+                            12
+                        </p>
+
+                        <p class="text-xs text-gray-500">
+                            Topics Mastered
+                        </p>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-2xl font-bold">
+                            7
+                        </p>
+
+                        <p class="text-xs text-gray-500">
+                            Day Streak
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT IMAGE -->
+
+            <div class="relative">
+
+                <div class="rounded-[40px] overflow-hidden
+                            shadow-2xl">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=85"
+                        alt="Students learning together"
+                        class="w-full h-[600px] object-cover">
+
+                </div>
+
+
+                <!-- PROGRESS CARD -->
+
+                <div
+                    class="absolute -left-5 bottom-10
+                           bg-white rounded-3xl
+                           shadow-xl p-5 w-64
+                           animate-float">
+
+                    <div class="flex justify-between">
+
+                        <p class="font-semibold text-sm">
+                            Today's progress
+                        </p>
+
+                        <span class="text-orange-600 font-bold">
+                            78%
+                        </span>
+
+                    </div>
+
+
+                    <div class="h-2 bg-gray-100 rounded-full mt-4">
+
+                        <div
+                            class="h-2 bg-orange-500
+                                   rounded-full"
+                            style="width:78%">
+                        </div>
+
+                    </div>
+
+
+                    <p class="text-xs text-gray-500 mt-3">
+                        You're ahead of your weekly goal.
+                    </p>
+
+                </div>
+
+
+                <!-- STREAK CARD -->
+
+                <div
+                    class="absolute -right-5 top-10
+                           bg-[#17233c] text-white
+                           rounded-3xl shadow-xl
+                           p-5 w-48 animate-float">
+
+                    <p class="text-orange-300 text-xs uppercase
+                              tracking-widest">
+                        Current streak
+                    </p>
+
+                    <p class="text-4xl font-bold mt-2">
+                        7 🔥
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-1">
+                        Keep going!
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INTRO
+===================================================== -->
+
+<section class="py-24 bg-white">
+
+    <div class="max-w-5xl mx-auto px-6 text-center">
+
+        <p class="uppercase tracking-[4px]
+                  text-orange-600 text-sm">
+            A DIFFERENT WAY TO LEARN
+        </p>
+
+        <h2 class="font-serif text-4xl md:text-6xl
+                   leading-tight mt-5">
+
+            Because every student
+            <span class="italic">
+                learns differently.
+            </span>
+
+        </h2>
+
+        <p class="text-gray-600 text-lg leading-relaxed
+                  max-w-3xl mx-auto mt-7">
+
+            Instead of treating every student the same,
+            StudyAI follows your learning journey and adapts
+            practice, revision, peer learning and study
+            recommendations around your progress.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<section id="features"
+         class="py-24 bg-[#f5f2ea]">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="mb-14">
+
+            <p class="uppercase tracking-[3px]
+                      text-orange-600 text-sm">
+                NOT ANOTHER STUDY APP
+            </p>
+
+            <h2 class="font-serif text-4xl md:text-5xl mt-4">
+                Designed to make learning
+                <span class="italic">
+                    active.
+                </span>
+            </h2>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+
+            <!-- FEATURE 1 -->
+
+            <div class="bg-white rounded-[28px]
+                        p-7 premium-card">
+
+                <div class="text-3xl">
+                    🧠
+                </div>
+
+                <h3 class="font-serif text-2xl mt-6">
+                    Friction-Based Summaries
+                </h3>
+
+                <p class="text-gray-600 text-sm
+                          leading-relaxed mt-4">
+
+                    Strategic blanks and recall prompts
+                    interrupt passive reading and force
+                    your brain to retrieve what it knows.
+
+                </p>
+
+                <button
+                    onclick="revealSummary()"
+                    class="text-orange-600 text-sm
+                           font-semibold mt-6">
+
+                    Try a summary →
+
+                </button>
+
+            </div>
+
+
+
+            <!-- FEATURE 2 -->
+
+            <div class="bg-white rounded-[28px]
+                        p-7 premium-card">
+
+                <div class="text-3xl">
+                    📊
+                </div>
+
+                <h3 class="font-serif text-2xl mt-6">
+                    Metacognitive Dashboard
+                </h3>
+
+                <p class="text-gray-600 text-sm
+                          leading-relaxed mt-4">
+
+                    Track more than correctness. StudyAI
+                    observes hesitation time, repeated
+                    questions and confidence patterns.
+
+                </p>
+
+                <button
+                    onclick="document.getElementById('tracking').scrollIntoView()"
+                    class="text-orange-600 text-sm
+                           font-semibold mt-6">
+
+                    View my patterns →
+
+                </button>
+
+            </div>
+
+
+
+            <!-- FEATURE 3 -->
+
+            <div class="bg-white rounded-[28px]
+                        p-7 premium-card">
+
+                <div class="text-3xl">
+                    🔄
+                </div>
+
+                <h3 class="font-serif text-2xl mt-6">
+                    Context-Aware Spacing
+                </h3>
+
+                <p class="text-gray-600 text-sm
+                          leading-relaxed mt-4">
+
+                    Instead of revising one subject endlessly,
+                    related concepts are intelligently
+                    interleaved across your study sessions.
+
+                </p>
+
+                <button
+                    onclick="startRecommendation()"
+                    class="text-orange-600 text-sm
+                           font-semibold mt-6">
+
+                    See recommendation →
+
+                </button>
+
+            </div>
+
+
+
+            <!-- FEATURE 4 -->
+
+            <div class="bg-white rounded-[28px]
+                        p-7 premium-card">
+
+                <div class="text-3xl">
+                    🎙️
+                </div>
+
+                <h3 class="font-serif text-2xl mt-6">
+                    Voice-First Mock Exams
+                </h3>
+
+                <p class="text-gray-600 text-sm
+                          leading-relaxed mt-4">
+
+                    Practise viva and interview questions
+                    conversationally and receive feedback
+                    on your answers.
+
+                </p>
+
+                <button
+                    onclick="startVoiceExam()"
+                    class="text-orange-600 text-sm
+                           font-semibold mt-6">
+
+                    Start mock viva →
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     LEARNING TRACKER
+===================================================== -->
+
+<section id="tracking"
+         class="py-24 bg-white">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="grid lg:grid-cols-3 gap-6">
+
+
+            <!-- OVERALL -->
+
+            <div
+                class="lg:col-span-2
+                       bg-[#17233c] text-white
+                       rounded-[32px] p-8 md:p-10">
+
+                <div class="flex flex-col md:flex-row
+                            justify-between gap-6">
+
+                    <div>
+
+                        <p class="uppercase tracking-[3px]
+                                  text-orange-300 text-xs">
+                            YOUR LEARNING TRACKER
+                        </p>
+
+                        <h2 class="font-serif text-4xl mt-3">
+                            You're making progress.
+                        </h2>
+
+                        <p class="text-gray-300 mt-3">
+                            Here's how your learning is developing.
+                        </p>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-5xl font-bold">
+                            78%
+                        </p>
+
+                        <p class="text-gray-400 text-sm">
+                            overall progress
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div class="mt-10">
+
+                    <div class="flex justify-between text-sm">
+
+                        <span>
+                            Weekly learning goal
+                        </span>
+
+                        <span>
+                            78 / 100
+                        </span>
+
+                    </div>
+
+                    <div class="h-3 bg-white/10
+                                rounded-full mt-3">
+
+                        <div
+                            class="h-3 bg-orange-500
+                                   rounded-full progress-bar"
+                            style="width:78%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBJECTS -->
+
+                <div class="grid sm:grid-cols-3 gap-5 mt-10">
+
+
+                    <div class="glass rounded-2xl p-5">
+
+                        <p class="text-gray-400 text-xs">
+                            PYTHON
+                        </p>
+
+                        <p class="text-2xl font-bold mt-2">
+                            86%
+                        </p>
+
+                        <div class="h-1.5 bg-white/10
+                                    rounded-full mt-3">
+
+                            <div
+                                class="h-1.5 bg-orange-500
+                                       rounded-full"
+                                style="width:86%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="glass rounded-2xl p-5">
+
+                        <p class="text-gray-400 text-xs">
+                            DBMS
+                        </p>
+
+                        <p class="text-2xl font-bold mt-2">
+                            74%
+                        </p>
+
+                        <div class="h-1.5 bg-white/10
+                                    rounded-full mt-3">
+
+                            <div
+                                class="h-1.5 bg-orange-500
+                                       rounded-full"
+                                style="width:74%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="glass rounded-2xl p-5">
+
+                        <p class="text-gray-400 text-xs">
+                            AI
+                        </p>
+
+                        <p class="text-2xl font-bold mt-2">
+                            69%
+                        </p>
+
+                        <div class="h-1.5 bg-white/10
+                                    rounded-full mt-3">
+
+                            <div
+                                class="h-1.5 bg-orange-500
+                                       rounded-full"
+                                style="width:69%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RECOMMENDATION -->
+
+            <div
+                class="bg-[#f5f2ea]
+                       rounded-[32px] p-8">
+
+                <p class="uppercase tracking-[3px]
+                          text-orange-600 text-xs">
+                    AI RECOMMENDATION
+                </p>
+
+                <h3 class="font-serif text-3xl mt-4">
+                    Strengthen DBMS next.
+                </h3>
+
+                <p class="text-gray-600 text-sm
+                          leading-relaxed mt-4">
+
+                    Your recent answers show that
+                    normalization and SQL joins need
+                    a little more practice.
+
+                </p>
+
+
+                <div
+                    class="bg-white rounded-2xl p-5 mt-7">
+
+                    <p class="text-xs text-gray-500">
+                        SUGGESTED SESSION
+                    </p>
+
+                    <p class="font-semibold mt-2">
+                        SQL Joins → 15 min
+                    </p>
+
+                    <p class="text-xs text-gray-500 mt-1">
+                        Followed by a personalized game
+                    </p>
+
+                </div>
+
+
+                <button
+                    onclick="startRecommendation()"
+                    class="w-full mt-6
+                           bg-[#17233c] text-white
+                           py-3.5 rounded-full
+                           font-semibold">
+
+                    Start Recommended Session
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BADGES -->
+
+        <div class="grid md:grid-cols-3 gap-5 mt-6">
+
+
+            <div class="border border-gray-200
+                        rounded-2xl p-6">
+
+                <p class="text-2xl">
+                    🔥
+                </p>
+
+                <p class="font-semibold mt-3">
+                    7 Day Streak
+                </p>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    Consistency is becoming a habit.
+                </p>
+
+            </div>
+
+
+            <div class="border border-gray-200
+                        rounded-2xl p-6">
+
+                <p class="text-2xl">
+                    🏆
+                </p>
+
+                <p class="font-semibold mt-3">
+                    12 Topics Mastered
+                </p>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    Keep building your knowledge.
+                </p>
+
+            </div>
+
+
+            <div class="border border-gray-200
+                        rounded-2xl p-6">
+
+                <p class="text-2xl">
+                    ⭐
+                </p>
+
+                <p class="font-semibold mt-3">
+                    840 XP
+                </p>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    Earn XP by learning and practising.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PEER LEARNING
+===================================================== -->
+
+<section id="peers"
+         class="py-24 bg-[#f5f2ea]">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+
+        <!-- HEADER -->
+
+        <div class="grid lg:grid-cols-2 gap-10
+                    items-end mb-14">
+
+            <div>
+
+                <p class="uppercase tracking-[3px]
+                          text-orange-600 text-sm">
+                    STUDY TOGETHER
+                </p>
+
+                <h2 class="font-serif text-4xl
+                           md:text-5xl mt-4 leading-tight">
+
+                    Learn with people
+                    <span class="italic">
+                        on the same journey.
+                    </span>
+
+                </h2>
+
+            </div>
+
+
+            <p class="text-gray-600 text-lg
+                      leading-relaxed max-w-xl">
+
+                StudyAI connects students based on
+                the topics they are already learning.
+                Find study partners, join focused rooms
+                and practise together.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- MAIN PEER GRID -->
+
+        <div class="grid lg:grid-cols-3 gap-6">
+
+
+            <!-- STUDY ROOM -->
+
+            <div
+                class="lg:col-span-2
+                       bg-[#17233c] text-white
+                       rounded-[32px] p-8 md:p-10
+                       relative overflow-hidden">
+
+                <div
+                    class="absolute -right-20 -top-20
+                           w-64 h-64 rounded-full
+                           border border-white/10">
+                </div>
+
+
+                <div class="relative z-10">
+
+                    <div class="flex flex-col md:flex-row
+                                justify-between gap-6">
+
+                        <div>
+
+                            <p class="text-orange-300 text-xs
+                                      uppercase tracking-[3px]">
+                                ACTIVE STUDY ROOM
+                            </p>
+
+                            <h3 class="font-serif text-3xl
+                                       md:text-4xl mt-3">
+                                DBMS & SQL
+                            </h3>
+
+                            <p class="text-gray-300 mt-3 max-w-lg">
+
+                                Students currently revising
+                                normalization, SQL joins and
+                                transactions.
+
+                            </p>
+
+                        </div>
+
+
+                        <div class="text-left md:text-right">
+
+                            <p class="text-3xl font-bold">
+                                24
+                            </p>
+
+                            <p class="text-gray-400 text-sm">
+                                students learning
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TOPICS -->
+
+                    <div class="flex flex-wrap gap-2 mt-7">
+
+                        <span class="glass px-3 py-1.5
+                                     rounded-full text-xs">
+                            Normalization
+                        </span>
+
+                        <span class="glass px-3 py-1.5
+                                     rounded-full text-xs">
+                            SQL Joins
+                        </span>
+
+                        <span class="glass px-3 py-1.5
+                                     rounded-full text-xs">
+                            Transactions
+                        </span>
+
+                    </div>
+
+
+                    <!-- STUDENT AVATARS -->
+
+                    <div class="mt-9">
+
+                        <p class="text-xs uppercase
+                                  tracking-widest
+                                  text-gray-400 mb-4">
+
+                            Students active now
+
+                        </p>
+
+
+                        <div class="flex items-center">
+
+                            <div
+                                class="w-11 h-11 rounded-full
+                                       bg-orange-200
+                                       text-[#17233c]
+                                       flex items-center justify-center
+                                       font-bold
+                                       border-2 border-[#17233c]">
+                                A
+                            </div>
+
+
+                            <div
+                                class="-ml-3 w-11 h-11 rounded-full
+                                       bg-blue-200
+                                       text-[#17233c]
+                                       flex items-center justify-center
+                                       font-bold
+                                       border-2 border-[#17233c]">
+                                P
+                            </div>
+
+
+                            <div
+                                class="-ml-3 w-11 h-11 rounded-full
+                                       bg-green-200
+                                       text-[#17233c]
+                                       flex items-center justify-center
+                                       font-bold
+                                       border-2 border-[#17233c]">
+                                R
+                            </div>
+
+
+                            <div
+                                class="-ml-3 w-11 h-11 rounded-full
+                                       bg-purple-200
+                                       text-[#17233c]
+                                       flex items-center justify-center
+                                       font-bold
+                                       border-2 border-[#17233c]">
+                                S
+                            </div>
+
+
+                            <div
+                                class="-ml-3 w-11 h-11 rounded-full
+                                       bg-white/10
+                                       flex items-center justify-center
+                                       text-xs
+                                       border-2 border-[#17233c]">
+                                +20
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        onclick="joinStudyRoom()"
+                        class="mt-8 bg-orange-500
+                               hover:bg-orange-600
+                               px-7 py-3.5
+                               rounded-full
+                               font-semibold
+                               transition">
+
+                        Join Study Room →
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PERSONAL MATCH -->
+
+            <div
+                class="bg-white rounded-[32px]
+                       p-8 border border-gray-200
+                       premium-card">
+
+                <div class="flex justify-between">
+
+                    <div>
+
+                        <p class="text-xs uppercase
+                                  tracking-widest
+                                  text-orange-600">
+                            YOUR MATCH
+                        </p>
+
+                        <h3 class="font-serif text-2xl mt-3">
+                            Study with Priya
+                        </h3>
+
+                    </div>
+
+                    <span class="text-2xl">
+                        🤝
+                    </span>
+
+                </div>
+
+
+                <!-- PROFILE -->
+
+                <div class="flex items-center gap-4 mt-7">
+
+                    <div
+                        class="w-14 h-14 rounded-full
+                               bg-orange-100
+                               flex items-center
+                               justify-center text-xl">
+                        👩‍💻
+                    </div>
+
+
+                    <div>
+
+                        <p class="font-bold">
+                            Priya
+                        </p>
+
+                        <p class="text-sm text-gray-500">
+                            AI & ML Student
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SHARED TOPICS -->
+
+                <div
+                    class="bg-[#f5f2ea]
+                           rounded-2xl p-4 mt-7">
+
+                    <p class="text-xs text-gray-500">
+                        YOU BOTH STUDIED
+                    </p>
+
+                    <p class="font-semibold mt-2">
+                        SQL Joins
+                    </p>
+
+                    <p class="text-xs text-gray-500 mt-1">
+                        + Normalization
+                    </p>
+
+                </div>
+
+
+                <div class="flex items-center gap-2 mt-5">
+
+                    <span class="orange-dot"></span>
+
+                    <p class="text-xs text-gray-500">
+                        Available to study
+                    </p>
+
+                </div>
+
+
+                <button
+                    onclick="connectPeer('Priya')"
+                    class="w-full mt-6
+                           border border-[#17233c]
+                           text-[#17233c]
+                           py-3 rounded-full
+                           font-semibold
+                           hover:bg-[#17233c]
+                           hover:text-white
+                           transition">
+
+                    Study Together
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- OTHER PEERS -->
+
+        <div class="mt-10">
+
+            <div class="flex justify-between
+                        items-center mb-5">
+
+                <h3 class="font-serif text-2xl">
+                    More students you may learn with
+                </h3>
+
+                <button
+                    onclick="showAllPeers()"
+                    class="text-sm font-semibold
+                           text-orange-600">
+
+                    View all →
+
+                </button>
+
+            </div>
+
+
+            <div class="grid md:grid-cols-3 gap-4">
+
+
+                <!-- PEER 1 -->
+
+                <div
+                    class="bg-white rounded-2xl p-5
+                           border border-gray-200
+                           flex items-center
+                           justify-between
+                           premium-card">
+
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="w-12 h-12 rounded-full
+                                   bg-blue-100
+                                   flex items-center
+                                   justify-center">
+                            👨‍💻
+                        </div>
+
+                        <div>
+
+                            <p class="font-semibold">
+                                Rahul
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                Python · AI
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        onclick="connectPeer('Rahul')"
+                        class="text-orange-600
+                               text-sm font-semibold">
+
+                        Connect
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- PEER 2 -->
+
+                <div
+                    class="bg-white rounded-2xl p-5
+                           border border-gray-200
+                           flex items-center
+                           justify-between
+                           premium-card">
+
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="w-12 h-12 rounded-full
+                                   bg-green-100
+                                   flex items-center
+                                   justify-center">
+                            👩‍🎓
+                        </div>
+
+                        <div>
+
+                            <p class="font-semibold">
+                                Ananya
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                Statistics · ML
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        onclick="connectPeer('Ananya')"
+                        class="text-orange-600
+                               text-sm font-semibold">
+
+                        Connect
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- PEER 3 -->
+
+                <div
+                    class="bg-white rounded-2xl p-5
+                           border border-gray-200
+                           flex items-center
+                           justify-between
+                           premium-card">
+
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="w-12 h-12 rounded-full
+                                   bg-purple-100
+                                   flex items-center
+                                   justify-center">
+                            👨‍🎓
+                        </div>
+
+                        <div>
+
+                            <p class="font-semibold">
+                                Arjun
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                DBMS · SQL
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        onclick="connectPeer('Arjun')"
+                        class="text-orange-600
+                               text-sm font-semibold">
+
+                        Connect
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <p
+            id="peerStatus"
+            class="text-center text-sm
+                   text-orange-600 mt-7">
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     LEARNING JOURNEY
+===================================================== -->
+
+<section class="py-24 bg-white">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="text-center mb-14">
+
+            <p class="uppercase tracking-[3px]
+                      text-orange-600 text-sm">
+                YOUR LEARNING JOURNEY
+            </p>
+
+            <h2 class="font-serif text-4xl md:text-5xl mt-4">
+                From studying to
+                <span class="italic">
+                    mastering.
+                </span>
+            </h2>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-4 gap-6">
+
+
+            <div class="text-center">
+
+                <div
+                    class="w-20 h-20 rounded-full
+                           bg-[#f5f2ea]
+                           mx-auto flex items-center
+                           justify-center text-3xl">
+                    📚
+                </div>
+
+                <h3 class="font-serif text-2xl mt-5">
+                    Study
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Learn concepts at your own pace.
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div
+                    class="w-20 h-20 rounded-full
+                           bg-[#f5f2ea]
+                           mx-auto flex items-center
+                           justify-center text-3xl">
+                    📈
+                </div>
+
+                <h3 class="font-serif text-2xl mt-5">
+                    Track
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Understand your strengths and gaps.
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div
+                    class="w-20 h-20 rounded-full
+                           bg-[#f5f2ea]
+                           mx-auto flex items-center
+                           justify-center text-3xl">
+                    🤝
+                </div>
+
+                <h3 class="font-serif text-2xl mt-5">
+                    Connect
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Learn with peers studying similar topics.
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div
+                    class="w-20 h-20 rounded-full
+                           bg-[#f5f2ea]
+                           mx-auto flex items-center
+                           justify-center text-3xl">
+                    🏆
+                </div>
+
+                <h3 class="font-serif text-2xl mt-5">
+                    Master
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Practise until concepts become strong.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     GAME ZONE
+===================================================== -->
+
+<section id="games"
+         class="py-24 bg-[#f5f2ea]">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="grid lg:grid-cols-2 gap-12
+                    items-center">
+
+
+            <!-- IMAGE -->
+
+            <div
+                class="rounded-[36px] overflow-hidden
+                       shadow-xl">
+
+                <img
+                    src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=85"
+                    alt="Learning game"
+                    class="w-full h-[500px] object-cover">
+
+            </div>
+
+
+
+            <!-- GAME CONTENT -->
+
+            <div>
+
+                <p class="uppercase tracking-[3px]
+                          text-orange-600 text-sm">
+                    PERSONALIZED GAME ZONE
+                </p>
+
+
+                <h2 class="font-serif text-4xl md:text-5xl
+                           mt-4 leading-tight">
+
+                    Your games are based on
+                    <span class="italic">
+                        what you studied.
+                    </span>
+
+                </h2>
+
+
+                <p class="text-gray-600 text-lg
+                          leading-relaxed mt-6">
+
+                    StudyAI doesn't give everyone the same game.
+                    Your recent learning determines the questions,
+                    concepts and difficulty.
+
+                </p>
+
+
+                <!-- SUBJECT BUTTONS -->
+
+                <div class="flex flex-wrap gap-2 mt-8">
+
+                    <button
+                        onclick="changeGame('Python')"
+                        class="game-button active
+                               px-4 py-2 rounded-full
+                               border border-[#17233c]
+                               text-sm">
+
+                        Python
+
+                    </button>
+
+
+                    <button
+                        onclick="changeGame('DBMS')"
+                        class="game-button
+                               px-4 py-2 rounded-full
+                               border border-[#17233c]
+                               text-sm">
+
+                        DBMS
+
+                    </button>
+
+
+                    <button
+                        onclick="changeGame('AI')"
+                        class="game-button
+                               px-4 py-2 rounded-full
+                               border border-[#17233c]
+                               text-sm">
+
+                        AI
+
+                    </button>
+
+
+                    <button
+                        onclick="changeGame('Statistics')"
+                        class="game-button
+                               px-4 py-2 rounded-full
+                               border border-[#17233c]
+                               text-sm">
+
+                        Statistics
+
+                    </button>
+
+                </div>
+
+
+                <!-- GAME CARD -->
+
+                <div
+                    class="bg-white rounded-[28px]
+                           p-7 mt-7
+                           border border-gray-200">
+
+                    <p class="text-xs uppercase
+                              tracking-widest
+                              text-orange-600">
+                        RECOMMENDED FOR YOU
+                    </p>
+
+
+                    <h3
+                        id="gameTitle"
+                        class="font-serif text-3xl mt-3">
+                        Python Code Detective
+                    </h3>
+
+
+                    <p
+                        id="gameDescription"
+                        class="text-gray-600 text-sm
+                              leading-relaxed mt-3">
+
+                        Identify errors in Python code
+                        based on concepts you recently studied.
+
+                    </p>
+
+
+                    <div class="flex gap-6 mt-6">
+
+                        <div>
+
+                            <p class="font-bold">
+                                10
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                Questions
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <p class="font-bold">
+                                5 min
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                Estimated
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <p class="font-bold">
+                                +100
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                XP
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        onclick="startGame()"
+                        class="mt-7 bg-[#17233c]
+                               text-white px-7 py-3.5
+                               rounded-full
+                               font-semibold">
+
+                        Play Personalized Game →
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     RECENT ACTIVITY
+===================================================== -->
+
+<section class="py-24 bg-white">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="mb-12">
+
+            <p class="uppercase tracking-[3px]
+                      text-orange-600 text-sm">
+                LEARNING ACTIVITY
+            </p>
+
+            <h2 class="font-serif text-4xl mt-4">
+                Your recent journey
+            </h2>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-3 gap-5">
+
+
+            <div
+                class="border border-gray-200
+                       rounded-2xl p-6
+                       premium-card">
+
+                <p class="text-2xl">
+                    🧠
+                </p>
+
+                <p class="font-semibold mt-4">
+                    Completed SQL Joins
+                </p>
+
+                <p class="text-sm text-gray-500 mt-2">
+                    15 questions · 86% accuracy
+                </p>
+
+                <p class="text-xs text-orange-600 mt-4">
+                    Today · 10:42 AM
+                </p>
+
+            </div>
+
+
+            <div
+                class="border border-gray-200
+                       rounded-2xl p-6
+                       premium-card">
+
+                <p class="text-2xl">
+                    🤝
+                </p>
+
+                <p class="font-semibold mt-4">
+                    Joined DBMS Study Room
+                </p>
+
+                <p class="text-sm text-gray-500 mt-2">
+                    Studied with 24 other students
+                </p>
+
+                <p class="text-xs text-orange-600 mt-4">
+                    Yesterday · 7:20 PM
+                </p>
+
+            </div>
+
+
+            <div
+                class="border border-gray-200
+                       rounded-2xl p-6
+                       premium-card">
+
+                <p class="text-2xl">
+                    🎮
+                </p>
+
+                <p class="font-semibold mt-4">
+                    Completed Python Game
+                </p>
+
+                <p class="text-sm text-gray-500 mt-2">
+                    92% score · +100 XP
+                </p>
+
+                <p class="text-xs text-orange-600 mt-4">
+                    Yesterday · 5:30 PM
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI ASSISTANT
+===================================================== -->
+
+<section id="assistant"
+         class="py-24 bg-[#17233c] text-white">
+
+    <div class="max-w-6xl mx-auto px-6 text-center">
+
+        <p class="uppercase tracking-[4px]
+                  text-orange-300 text-sm">
+            YOUR AI STUDY PARTNER
+        </p>
+
+
+        <h2 class="font-serif text-4xl md:text-6xl
+                   mt-5">
+
+            Stuck on something?
+
+            <br>
+
+            <span class="italic">
+                Just ask.
+            </span>
+
+        </h2>
+
+
+        <p class="text-gray-300 max-w-2xl
+                  mx-auto mt-6 text-lg">
+
+            Get explanations, hints, revision questions
+            and study guidance whenever you need it.
+
+        </p>
+
+
+        <div class="flex flex-wrap justify-center
+                    gap-3 mt-9">
+
+            <button
+                onclick="assistantMessage('Explain this concept')"
+                class="glass px-5 py-3 rounded-full
+                       text-sm">
+
+                Explain a concept
+
+            </button>
+
+
+            <button
+                onclick="assistantMessage('Give me a quiz')"
+                class="glass px-5 py-3 rounded-full
+                       text-sm">
+
+                Give me a quiz
+
+            </button>
+
+
+            <button
+                onclick="assistantMessage('Help me revise')"
+                class="glass px-5 py-3 rounded-full
+                       text-sm">
+
+                Help me revise
+
+            </button>
+
+        </div>
+
+
+        <button
+            onclick="assistantMessage('Open AI Assistant')"
+            class="mt-9 bg-orange-500
+                   hover:bg-orange-600
+                   px-8 py-4 rounded-full
+                   font-semibold">
+
+            Open AI Assistant →
+
+        </button>
+
+
+        <p
+            id="assistantStatus"
+            class="text-orange-300 text-sm mt-6">
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FINAL CTA
+===================================================== -->
+
+<section class="py-24 bg-[#f5f2ea]">
+
+    <div class="max-w-5xl mx-auto px-6 text-center">
+
+        <h2 class="font-serif text-4xl md:text-6xl">
+
+            Your learning journey
+            <span class="italic">
+                starts here.
+            </span>
+
+        </h2>
+
+
+        <p class="text-gray-600 text-lg mt-6">
+
+            Study smarter. Track your growth.
+            Learn with peers. Play. Improve. Repeat.
+
+        </p>
+
+
+        <button
+            onclick="startLearning()"
+            class="mt-9 bg-[#17233c]
+                   text-white px-8 py-4
+                   rounded-full font-semibold
+                   hover:scale-105 transition">
+
+            Start Learning →
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="bg-[#17233c] text-white py-12">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="flex flex-col md:flex-row
+                    justify-between gap-8">
+
+            <div>
+
+                <div class="flex items-center gap-3">
+
+                    <div
+                        class="w-10 h-10 rounded-xl
+                               bg-white text-[#17233c]
+                               flex items-center justify-center
+                               font-bold">
+
+                        S
+
+                    </div>
+
+                    <p class="font-bold text-lg">
+                        StudyAI
+                    </p>
+
+                </div>
+
+
+                <p class="text-gray-400 text-sm
+                          mt-4 max-w-sm">
+
+                    An AI-powered personalized study
+                    assistant designed to make learning
+                    more meaningful.
+
+                </p>
+
+            </div>
+
+
+            <div class="text-sm text-gray-400">
+
+                <p>
+                    AI in Education
+                </p>
+
+                <p class="mt-2">
+                    Personalized Learning
+                </p>
+
+                <p class="mt-2">
+                    Peer Learning
+                </p>
+
+                <p class="mt-2">
+                    Smart Practice
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="border-t border-white/10
+                   mt-10 pt-6
+                   flex flex-col md:flex-row
+                   justify-between gap-3
+                   text-xs text-gray-500">
+
+            <p>
+                © 2026 StudyAI. Academic Prototype.
+            </p>
+
+            <p>
+                Built with Tailwind CSS
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =========================================
+   GENERAL NAVIGATION
+========================================= */
+
+function scrollToSection(id) {
+
+    document.getElementById(id)
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================
+   START LEARNING
+========================================= */
+
+function startLearning() {
+
+    document.getElementById("tracking")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================
+   FRICTION SUMMARY
+========================================= */
+
+function revealSummary() {
+
+    alert(
+        "Friction-Based Summary\n\n" +
+        "Instead of simply reading:\n\n" +
+        "A transaction must satisfy ______ properties.\n\n" +
+        "Try recalling the answer before revealing it!"
+    );
+
+}
+
+
+/* =========================================
+   VOICE EXAM
+========================================= */
+
+function startVoiceExam() {
+
+    alert(
+        "Voice Mock Exam\n\n" +
+        "Question: Explain the concept of database normalization.\n\n" +
+        "Imagine answering verbally as if you were in a viva."
+    );
+
+}
+
+
+/* =========================================
+   AI RECOMMENDATION
+========================================= */
+
+function startRecommendation() {
+
+    alert(
+        "AI Recommendation\n\n" +
+        "Based on your recent learning:\n\n" +
+        "1. Revise SQL Joins\n" +
+        "2. Practise Normalization\n" +
+        "3. Complete the SQL Detective Game\n\n" +
+        "Estimated time: 25 minutes"
+    );
+
+}
+
+
+/* =========================================
+   GAME DATA
+========================================= */
+
+const gameData = {
+
+    Python: {
+
+        title: "Python Code Detective",
+
+        description:
+            "Identify errors in Python code based on concepts you recently studied."
+
+    },
+
+    DBMS: {
+
+        title: "SQL Detective",
+
+        description:
+            "Solve database challenges using SQL joins, normalization and transactions."
+
+    },
+
+    AI: {
+
+        title: "AI Search Challenge",
+
+        description:
+            "Choose the best AI search strategy for problems based on your studied concepts."
+
+    },
+
+    Statistics: {
+
+        title: "Statistics Sprint",
+
+        description:
+            "Solve quick statistics challenges covering concepts from your recent study sessions."
+
+    }
+
+};
+
+
+/* =========================================
+   CHANGE GAME
+========================================= */
+
+function changeGame(subject) {
+
+    const data = gameData[subject];
+
+    document.getElementById("gameTitle")
+        .innerText = data.title;
+
+    document.getElementById("gameDescription")
+        .innerText = data.description;
+
+
+    const buttons =
+        document.querySelectorAll(".game-button");
+
+    buttons.forEach(button => {
+
+        button.classList.remove("active");
+
+        if (
+            button.innerText.trim()
+            === subject
+        ) {
+
+            button.classList.add("active");
+
+        }
+
+    });
+
+}
+
+
+/* =========================================
+   START GAME
+========================================= */
+
+function startGame() {
+
+    alert(
+        "Personalized Game Started!\n\n" +
+        "Your questions will be generated from " +
+        "the topics you have already studied."
+    );
+
+}
+
+
+/* =========================================
+   PEER LEARNING
+========================================= */
+
+function joinStudyRoom() {
+
+    const status =
+        document.getElementById("peerStatus");
+
+    status.innerText =
+        "🤝 You joined the DBMS & SQL study room. " +
+        "24 students are currently learning together.";
+
+}
+
+
+function connectPeer(name) {
+
+    const status =
+        document.getElementById("peerStatus");
+
+    status.innerText =
+        "✨ Study request sent to " +
+        name +
+        ". You both share recently studied topics.";
+
+}
+
+
+function showAllPeers() {
+
+    const status =
+        document.getElementById("peerStatus");
+
+    status.innerText =
+        "Showing students matched according to " +
+        "your recent learning topics.";
+
+}
+
+
+/* =========================================
+   AI ASSISTANT
+========================================= */
+
+function assistantMessage(action) {
+
+    const status =
+        document.getElementById("assistantStatus");
+
+    status.innerText =
+        "AI Assistant: " +
+        action +
+        " — ready to help with your learning.";
+
+}
+
+
+</script>
+
+</body>
+</html>
